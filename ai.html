@@ -1,45 +1,37 @@
-<!DOCTYPE html><html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI 4K Wallpapers - Generate AI Wallpapers</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #000;
-      color: #fff;
-      text-align: center;
-    }
-    header {
-      background-color: #111;
-      padding: 20px 0;
-      font-size: 28px;
-      font-weight: bold;
-    }
-    h2 {
-      margin-top: 10px;
-      font-size: 22px;
-      color: #ccc;
-    }
-    .generator {
-      margin: 20px auto;
-      width: 100%;
-      max-width: 1000px;
-      height: 700px;
-      border: none;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-  </style>
-</head>
-<body>
-  <header>AI 4K Wallpapers</header>
-  <h2>AI Wallpaper Generator</h2>
-  <iframe 
-    class="generator"
-    src="https://huggingface.co/spaces/stabilityai/stable-diffusion"
-    allow="clipboard-write; clipboard-read; fullscreen"
-  ></iframe>
-</body>
-</html>
+// AI Image Generator Page (without API key)
+
+import { useState } from "react"; import { Input } from "@/components/ui/input"; import { Button } from "@/components/ui/button";
+
+export default function AIImageGenerator() { const [prompt, setPrompt] = useState(""); const [imageUrl, setImageUrl] = useState(""); const [loading, setLoading] = useState(false);
+
+const generateImage = async () => { if (!prompt) return; setLoading(true);
+
+try {
+  // Simulate image generation with static placeholder (no API call)
+  const sampleImages = [
+    "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg",
+    "https://images.pexels.com/photos/139829/pexels-photo-139829.jpeg",
+    "https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg"
+  ];
+
+  const randomImage = sampleImages[Math.floor(Math.random() * sampleImages.length)];
+  setImageUrl(randomImage);
+} catch (error) {
+  console.error("Image generation failed:", error);
+} finally {
+  setLoading(false);
+}
+
+};
+
+return ( <div className="flex flex-col items-center justify-center min-h-screen p-4"> <h1 className="text-2xl font-bold mb-4">AI Image Generator (Demo)</h1> <p className="text-sm mb-2 text-center text-gray-500"> Yeh demo version hai bina API ke. Har baar naya random image dikhaya jayega. </p> <div className="flex w-full max-w-md gap-2"> <Input type="text" placeholder="Prompt likho (jaise: sunset in mountains)" value={prompt} onChange={(e) => setPrompt(e.target.value)} /> <Button onClick={generateImage} disabled={loading}> {loading ? "Generating..." : "Generate"} </Button> </div>
+
+{imageUrl && (
+    <div className="mt-6">
+      <img src={imageUrl} alt="Generated" className="rounded-xl shadow-lg max-w-md" />
+    </div>
+  )}
+</div>
+
+); }
+
