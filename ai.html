@@ -1,5 +1,4 @@
-// pages/ai-generator.tsx
-"use client";
+// AIImageGenerator.tsx
 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -15,16 +14,15 @@ export default function AIImageGenerator() {
     setLoading(true);
 
     try {
-      // Static demo images (no API)
       const sampleImages = [
         "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg",
         "https://images.pexels.com/photos/139829/pexels-photo-139829.jpeg",
         "https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg",
-        "https://images.pexels.com/photos/355465/pexels-photo-355465.jpeg",
+        "https://images.pexels.com/photos/356378/pexels-photo-356378.jpeg",
+        "https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg"
       ];
 
-      const randomImage =
-        sampleImages[Math.floor(Math.random() * sampleImages.length)];
+      const randomImage = sampleImages[Math.floor(Math.random() * sampleImages.length)];
       setImageUrl(randomImage);
     } catch (error) {
       console.error("Image generation failed:", error);
@@ -35,19 +33,16 @@ export default function AIImageGenerator() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-3xl font-bold mb-2">AI 4K Wallpapers</h1>
-      <h2 className="text-xl font-semibold mb-4 text-blue-600">
-        AI Image Generator
-      </h2>
-      <p className="text-sm mb-2 text-center text-gray-500">
-        Yeh demo version hai bina API ke. Har baar naya random image dikhaya
-        jayega.
+      <h1 className="text-3xl font-bold mb-2 text-center">AI 4K Wallpapers</h1>
+      <h2 className="text-xl mb-4 text-gray-600">AI Image Generator (Demo)</h2>
+      <p className="text-sm mb-4 text-center text-gray-500">
+        Yeh demo version hai bina API ke. Har baar ek random beautiful image dikhaya jayega.
       </p>
 
       <div className="flex w-full max-w-md gap-2 mb-6">
         <Input
           type="text"
-          placeholder="Prompt likho (jaise: snowy mountain at night)"
+          placeholder="Prompt likho (jaise: futuristic city at night)"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
         />
@@ -61,8 +56,15 @@ export default function AIImageGenerator() {
           <img
             src={imageUrl}
             alt="Generated"
-            className="rounded-xl shadow-xl max-w-md w-full"
+            className="rounded-xl shadow-lg max-w-md"
           />
+          <a
+            href={imageUrl}
+            download
+            className="block mt-3 text-center text-blue-600 underline"
+          >
+            Click here to download this image
+          </a>
         </div>
       )}
     </div>
