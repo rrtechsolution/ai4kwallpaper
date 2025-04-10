@@ -1,5 +1,3 @@
-// AIImageGenerator.tsx
-
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -33,16 +31,15 @@ export default function AIImageGenerator() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-3xl font-bold mb-2 text-center">AI 4K Wallpapers</h1>
-      <h2 className="text-xl mb-4 text-gray-600">AI Image Generator (Demo)</h2>
-      <p className="text-sm mb-4 text-center text-gray-500">
-        Yeh demo version hai bina API ke. Har baar ek random beautiful image dikhaya jayega.
+      <h1 className="text-2xl font-bold mb-4">AI Image Generator (Demo)</h1>
+      <p className="text-sm mb-4 text-gray-500 text-center">
+        Yeh demo version hai bina API ke. Har baar ek random image dikhaya jayega.
       </p>
 
       <div className="flex w-full max-w-md gap-2 mb-6">
         <Input
           type="text"
-          placeholder="Prompt likho (jaise: futuristic city at night)"
+          placeholder="Prompt likho (jaise: sunset in mountains)"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
         />
