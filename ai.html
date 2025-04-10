@@ -1,37 +1,70 @@
-// AI Image Generator Page (without API key)
+// pages/ai-generator.tsx
+"use client";
 
-import { useState } from "react"; import { Input } from "@/components/ui/input"; import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
-export default function AIImageGenerator() { const [prompt, setPrompt] = useState(""); const [imageUrl, setImageUrl] = useState(""); const [loading, setLoading] = useState(false);
+export default function AIImageGenerator() {
+  const [prompt, setPrompt] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [loading, setLoading] = useState(false);
 
-const generateImage = async () => { if (!prompt) return; setLoading(true);
+  const generateImage = async () => {
+    if (!prompt) return;
+    setLoading(true);
 
-try {
-  // Simulate image generation with static placeholder (no API call)
-  const sampleImages = [
-    "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg",
-    "https://images.pexels.com/photos/139829/pexels-photo-139829.jpeg",
-    "https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg"
-  ];
+    try {
+      // Static demo images (no API)
+      const sampleImages = [
+        "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg",
+        "https://images.pexels.com/photos/139829/pexels-photo-139829.jpeg",
+        "https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg",
+        "https://images.pexels.com/photos/355465/pexels-photo-355465.jpeg",
+      ];
 
-  const randomImage = sampleImages[Math.floor(Math.random() * sampleImages.length)];
-  setImageUrl(randomImage);
-} catch (error) {
-  console.error("Image generation failed:", error);
-} finally {
-  setLoading(false);
-}
+      const randomImage =
+        sampleImages[Math.floor(Math.random() * sampleImages.length)];
+      setImageUrl(randomImage);
+    } catch (error) {
+      console.error("Image generation failed:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-};
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <h1 className="text-3xl font-bold mb-2">AI 4K Wallpapers</h1>
+      <h2 className="text-xl font-semibold mb-4 text-blue-600">
+        AI Image Generator
+      </h2>
+      <p className="text-sm mb-2 text-center text-gray-500">
+        Yeh demo version hai bina API ke. Har baar naya random image dikhaya
+        jayega.
+      </p>
 
-return ( <div className="flex flex-col items-center justify-center min-h-screen p-4"> <h1 className="text-2xl font-bold mb-4">AI Image Generator (Demo)</h1> <p className="text-sm mb-2 text-center text-gray-500"> Yeh demo version hai bina API ke. Har baar naya random image dikhaya jayega. </p> <div className="flex w-full max-w-md gap-2"> <Input type="text" placeholder="Prompt likho (jaise: sunset in mountains)" value={prompt} onChange={(e) => setPrompt(e.target.value)} /> <Button onClick={generateImage} disabled={loading}> {loading ? "Generating..." : "Generate"} </Button> </div>
+      <div className="flex w-full max-w-md gap-2 mb-6">
+        <Input
+          type="text"
+          placeholder="Prompt likho (jaise: snowy mountain at night)"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+        />
+        <Button onClick={generateImage} disabled={loading}>
+          {loading ? "Generating..." : "Generate"}
+        </Button>
+      </div>
 
-{imageUrl && (
-    <div className="mt-6">
-      <img src={imageUrl} alt="Generated" className="rounded-xl shadow-lg max-w-md" />
+      {imageUrl && (
+        <div className="mt-4">
+          <img
+            src={imageUrl}
+            alt="Generated"
+            className="rounded-xl shadow-xl max-w-md w-full"
+          />
+        </div>
+      )}
     </div>
-  )}
-</div>
-
-); }
-
+  );
+}
