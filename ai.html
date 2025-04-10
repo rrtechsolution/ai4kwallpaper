@@ -1,69 +1,64 @@
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+// AI Generated Wallpapers Page (uses Pexels API, no key exposure)
 
-export default function AIImageGenerator() {
-  const [prompt, setPrompt] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [loading, setLoading] = useState(false);
+import { useState } from "react"; import { Input } from "@/components/ui/input"; import { Button } from "@/components/ui/button";
 
-  const generateImage = async () => {
-    if (!prompt) return;
-    setLoading(true);
+export default function AIGeneratedWallpapers() { const [prompt, setPrompt] = useState(""); const [images, setImages] = useState([]); const [loading, setLoading] = useState(false);
 
-    try {
-      const sampleImages = [
-        "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg",
-        "https://images.pexels.com/photos/139829/pexels-photo-139829.jpeg",
-        "https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg",
-        "https://images.pexels.com/photos/356378/pexels-photo-356378.jpeg",
-        "https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg"
-      ];
+const fetchImages = async () => { if (!prompt) return; setLoading(true);
 
-      const randomImage = sampleImages[Math.floor(Math.random() * sampleImages.length)];
-      setImageUrl(randomImage);
-    } catch (error) {
-      console.error("Image generation failed:", error);
-    } finally {
-      setLoading(false);
+try {
+  const response = await fetch(
+    `https://api.pexels.com/v1/search?query=${encodeURIComponent(
+      prompt
+    )}&per_page=12`,
+    {
+      headers: {
+        Authorization: "YOUR_PEXELS_API_KEY_HERE",
+      },
     }
-  };
-
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-4">AI Image Generator (Demo)</h1>
-      <p className="text-sm mb-4 text-gray-500 text-center">
-        Yeh demo version hai bina API ke. Har baar ek random image dikhaya jayega.
-      </p>
-
-      <div className="flex w-full max-w-md gap-2 mb-6">
-        <Input
-          type="text"
-          placeholder="Prompt likho (jaise: sunset in mountains)"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-        />
-        <Button onClick={generateImage} disabled={loading}>
-          {loading ? "Generating..." : "Generate"}
-        </Button>
-      </div>
-
-      {imageUrl && (
-        <div className="mt-4">
-          <img
-            src={imageUrl}
-            alt="Generated"
-            className="rounded-xl shadow-lg max-w-md"
-          />
-          <a
-            href={imageUrl}
-            download
-            className="block mt-3 text-center text-blue-600 underline"
-          >
-            Click here to download this image
-          </a>
-        </div>
-      )}
-    </div>
   );
+
+  const data = await response.json();
+  setImages(data.photos || []);
+} catch (error) {
+  console.error("Image fetch failed:", error);
+} finally {
+  setLoading(false);
 }
+
+};
+
+return ( <div className="flex flex-col items-center p-6 min-h-screen"> <h1 className="text-2xl font-bold mb-2">AI Generated Wallpapers (Simulated)</h1> <p className="text-sm mb-4 text-gray-500 text-center"> Prompt likho aur AI jaisa feel lo — images Pexels se aayenge. </p>
+
+<div className="flex w-full max-w-xl gap-2 mb-6">
+    <Input
+      type="text"
+      placeholder="Prompt likho jaise: futuristic city, desert, etc."
+      value={prompt}
+      onChange={(e) => setPrompt(e.target.value)}
+    />
+    <Button onClick={fetchImages} disabled={loading}>
+      {loading ? "Loading..." : "Generate"}
+    </Button>
+  </div>
+
+  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+    {images.map((img) => (
+      <a
+        key={img.id}
+        href={img.src.original}
+        download
+        className="hover:opacity-80"
+      >
+        <img
+          src={img.src.medium}
+          alt={img.alt || "Generated image"}
+          className="rounded-lg shadow-md"
+        />
+      </a>
+    ))}
+  </div>
+</div>
+
+); }
+
