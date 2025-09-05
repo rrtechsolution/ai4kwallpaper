@@ -1,68 +1,59 @@
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Image Generator — Google AI Studio</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; text-align: center; }
+    #inputArea { display: none; margin-top: 20px; }
+    #result img { margin-top: 20px; max-width: 512px; border-radius: 8px; }
+  </style>
+</head>
+<body>
 
-export default function GoogleImageSearch() {
-  const [prompt, setPrompt] = useState("");
-  const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  <button onclick="showInput()">First Button</button>
+  <button onclick="showInput()">Second Button — Generate Image</button>
 
-  const fetchImages = async () => {
-    if (!prompt) return;
-    setLoading(true);
+  <div id="inputArea">
+    <input type="text" id="prompt" placeholder="Type your prompt..." size="50">
+    <button onclick="generateImage()">Generate</button>
+  </div>
 
-    try {
-      const response = await fetch(
-        `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(
-          prompt
-        )}&cx=YOUR_SEARCH_ENGINE_ID&searchType=image&key=AIzaSyC14OzQMWMnsftzIALXGM7aOc_02ixHCIA`
-      );
+  <div id="result"></div>
 
-      const data = await response.json();
-      setImages(data.items || []);
-    } catch (error) {
-      console.error("Google Image Search failed:", error);
-    } finally {
-      setLoading(false);
+  <script>
+    function showInput() {
+      document.getElementById('inputArea').style.display = 'block';
     }
-  };
 
-  return (
-    <div className="flex flex-col items-center p-6 min-h-screen">
-      <h1 className="text-2xl font-bold mb-2">Google Image Search</h1>
-      <p className="text-sm mb-4 text-gray-500 text-center">
-        Prompt likho aur Google se image results lao
-      </p>
+    async function generateImage() {
+      const prompt = document.getElementById('prompt').value;
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = 'Generating image... Please wait.';
 
-      <div className="flex w-full max-w-xl gap-2 mb-6">
-        <Input
-          type="text"
-          placeholder="Search images..."
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-        />
-        <Button onClick={fetchImages} disabled={loading}>
-          {loading ? "Loading..." : "Search"}
-        </Button>
-      </div>
+      try {
+        const response = await fetch('https://YOUR_VERTEX_AI_ENDPOINT/v1/images:generate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Use proper authentication: OAuth token or API key
+            'Authorization': 'Bearer YOUR_OAUTH_TOKEN_OR_API_KEY'
+          },
+          body: JSON.stringify({
+            prompt: prompt,
+            model: "imagen-3" // or "gemini-2.5-flash-image-preview"
+          })
+        });
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        {images.map((img, index) => (
-          <a
-            key={index}
-            href={img.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:opacity-80"
-          >
-            <img
-              src={img.link}
-              alt={img.title || "Image"}
-              className="rounded-lg shadow-md"
-            />
-          </a>
-        ))}
-      </div>
-    </div>
-  );
-}
+        const data = await response.json();
+        const imageUrl = data.imageUri; // variable depends on API spec
+
+        resultDiv.innerHTML = `<img src="${imageUrl}" alt="Generated Image">`;
+      } catch (err) {
+        console.error(err);
+        resultDiv.innerHTML = 'Error generating image.';
+      }
+    }
+  </script>
+</body>
+</html>
