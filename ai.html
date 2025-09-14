@@ -2,58 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AI Image Generator — Google AI Studio</title>
+  <title>AI Image Generator</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; text-align: center; }
-    #inputArea { display: none; margin-top: 20px; }
-    #result img { margin-top: 20px; max-width: 512px; border-radius: 8px; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    h1 {
+      margin-bottom: 15px;
+      font-size: 26px;
+    }
+    p {
+      margin-bottom: 25px;
+      font-size: 14px;
+      color: #eee;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #ff7eb3;
+      border-radius: 30px;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      background: #ff4e88;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
   </style>
 </head>
 <body>
-
-  <button onclick="showInput()">First Button</button>
-  <button onclick="showInput()">Second Button — Generate Image</button>
-
-  <div id="inputArea">
-    <input type="text" id="prompt" placeholder="Type your prompt..." size="50">
-    <button onclick="generateImage()">Generate</button>
+  <div class="container">
+    <h1>AI Image Generator</h1>
+    <p>Click below to open Google AI Studio and generate your custom image.</p>
+    <a class="btn" href="https://aistudio.google.com/prompts/new_chat?model=gemini-2.5-flash-image-preview" target="_blank">
+      Generate Image
+    </a>
   </div>
-
-  <div id="result"></div>
-
-  <script>
-    function showInput() {
-      document.getElementById('inputArea').style.display = 'block';
-    }
-
-    async function generateImage() {
-      const prompt = document.getElementById('prompt').value;
-      const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = 'Generating image... Please wait.';
-
-      try {
-        const response = await fetch('https://YOUR_VERTEX_AI_ENDPOINT/v1/images:generate', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            // Use proper authentication: OAuth token or API key
-            'Authorization': 'Bearer YOUR_OAUTH_TOKEN_OR_API_KEY'
-          },
-          body: JSON.stringify({
-            prompt: prompt,
-            model: "imagen-3" // or "gemini-2.5-flash-image-preview"
-          })
-        });
-
-        const data = await response.json();
-        const imageUrl = data.imageUri; // variable depends on API spec
-
-        resultDiv.innerHTML = `<img src="${imageUrl}" alt="Generated Image">`;
-      } catch (err) {
-        console.error(err);
-        resultDiv.innerHTML = 'Error generating image.';
-      }
-    }
-  </script>
 </body>
 </html>
